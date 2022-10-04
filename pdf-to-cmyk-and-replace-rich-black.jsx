@@ -1,5 +1,12 @@
-﻿// written by Aris Vidalis - contact me at arisvidalis@gmail.com
-﻿app.userInteractionLevel = UserInteractionLevel.DONTDISPLAYALERTS;
+// written by Aris Vidalis - contact me at arisvidalis@gmail.com
+// Before running the script:
+// 1. Gather your files in a certain folder
+// 2. Create a subfolder named "newpdf" (without the quotes)
+// 3. Open Adobe Illustrator and create a blank file (without an open file the app.executeMenuCommand("doc-color-cmyk") is not running
+// 4. Run the script fron the menu File > Scripts > Other scripts
+// if you wish to do more color replacement operations such as cleaning yellows, reds, etc  you can add them after line 44 for example
+
+app.userInteractionLevel = UserInteractionLevel.DONTDISPLAYALERTS;
 var filesFolder = Folder.selectDialog('Select the folder where the (.ai) files are located.', '~');
 if (filesFolder != null) {
   var filesArray = new Array();
@@ -44,7 +51,8 @@ if (filesFolder != null) {
           }
         }
 
-// procedure for text objects
+// process text objects; here all text is converted to 100K and Overprint Fill
+// if you have text with other colors you can add conditions and process accordingly
 
         var tfs = doc.textFrames;
         var n = tfs.length;
@@ -60,10 +68,6 @@ if (filesFolder != null) {
               converted_counter++;
               current_characters[j].fillColor = pureK;
               current_characters[j].overprintFill = true;
-            }
-        // delete a hidden courier text to prevent problems
-            if (current_range.textFont == textFonts['Courier']) {
-              current_range.remove();
             }
           }
         }
@@ -82,6 +86,7 @@ if (filesFolder != null) {
 }
 
 // pdf save option definition
+
 function saveAsPDF() {
   var pdfFile = new File(app.activeDocument.path + "/newpdf/" + app.activeDocument.name.split('.')[0] + '.pdf');
   var pdfOptions = new PDFSaveOptions();
